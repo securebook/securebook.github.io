@@ -35,6 +35,10 @@ export class EntityManager<C, T extends BaseEntity<C>> implements IEntityManager
 		return `${this.entityName}/${id}`;
 	}
 
+	private getIdFromEntityFileName(entityFileName: string) {
+		return entityFileName.substring(this.entityName.length + 1);
+	}
+
 	private performOnLists(fun: (val: EntityData<C,T>['loadedList'] | EntityData<C,T>['workingList']) => any) {
 		fun(this.entityData.loadedList);
 		this.entityData.loadedList = { ...this.entityData.loadedList };
@@ -61,15 +65,17 @@ export class EntityManager<C, T extends BaseEntity<C>> implements IEntityManager
 			this.entityData.status = 'loading';
 			let isNoteListCreated = false;
 			const filesystemContent = await this.filesystem.getFolderContent(`${this.entityName}`);
+
 			const createdFiles: { [k: string]: boolean } = {};
 			for (let i = 0; i < filesystemContent.length; i++) {
 				const contentItem = filesystemContent[i];
 				if (contentItem.path === entityListName) {
 					isNoteListCreated = true;
 				} else {
-					createdFiles[contentItem.path] = true;
+					createdFiles[this.getIdFromEntityFileName(contentItem.path)] = true;
 				}
 			}
+
 			let entityListFileContent: EntityListFileContent<C,T> = {};
 			try {
 				if (isNoteListCreated) {
@@ -96,18 +102,36 @@ export class EntityManager<C, T extends BaseEntity<C>> implements IEntityManager
 				}
 				throw e;
 			}
+
 			const loadedList: EntityData<C,T>['loadedList'] = {};
 			for (const id in entityListFileContent) {
 				const entityInListFileWithContent = {
 					...entityListFileContent[id],
 					content: {
-						status: createdFiles[this.getEntityFileName(id)] ? 'not loaded: created' : 'not loaded: not created',
+						status: createdFiles[id] ? 'not loaded: created' : 'not loaded: not created',
 						value: null,
 					}
 				};
+				delete createdFiles[id];
 				const entityInList: T = entityInListFileWithContent as T;
 				loadedList[id] = entityInList;
 			}
+
+			// If some files are NOT in JSON, but their content file exists,
+			// that means that there was some unsyncing. We should still keep it in the list
+			// and let users do handle it in the UI
+			for(const id in createdFiles) {
+				const def = this.getDefault(id);
+				const item = {
+					...def,
+					content: {
+						...def.content,
+						status: 'not loaded: lost',
+					}
+				};
+				loadedList[id] = item as T;
+			}
+
 			this.entityData.loadedList = loadedList;
 			this.entityData.workingList = deepCopy(loadedList);
 			this.entityData.status = 'loaded';

@@ -1,7 +1,17 @@
 export type BaseEntity<T> = {
 	id: string,
 	content: {
-		status: 'not loaded: not created' | 'not loaded: created' | 'loaded: not created' | 'loading' | 'error' | 'loaded' | 'creating' | 'updating' | 'deleting' | 'deleted',
+		status: 'not loaded: lost' |
+			'not loaded: not created' |
+			'not loaded: created' |
+			'loaded: not created' |
+			'loading' |
+			'error' |
+			'loaded' |
+			'creating' |
+			'updating' |
+			'deleting' |
+			'deleted',
 		value: null | T
 	},
 };
@@ -15,7 +25,14 @@ export type UserEntity<C, T extends BaseEntity<C>> = Omit<T, 'content'> & {
 };
 
 export interface EntityData<C, T extends BaseEntity<C>> {
-	status: 'not loaded' | 'loading' | 'loaded' | 'loading entity' | 'creating entity' | 'updating entity' | 'deleting entity' | 'error',
+	status: 'not loaded' |
+		'loading' |
+		'loaded' |
+		'loading entity' |
+		'creating entity' |
+		'updating entity' |
+		'deleting entity' |
+		'error',
 	loadedList: { [k: string]: T },
 	workingList: { [k: string]: T },
 }

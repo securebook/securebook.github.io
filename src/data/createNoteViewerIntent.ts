@@ -28,7 +28,10 @@ export function createNoteViewerIntent(location: Location, auth: AuthData, passw
 		},
 
 		loadNoteWhenSelected() {
-			if (this.isCurrentIntentValid && notes.selected && notes.selected.content.status === 'not loaded: created') {
+			if (this.isCurrentIntentValid && notes.selected && (
+				notes.selected.content.status === 'not loaded: created' ||
+				notes.selected.content.status === 'not loaded: lost'
+			)) {
 				noteManager.loadNote(notes.selected.id);
 			}
 		},
