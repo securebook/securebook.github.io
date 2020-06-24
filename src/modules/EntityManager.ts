@@ -220,10 +220,7 @@ export class EntityManager<C, T extends BaseEntity<C>> implements IEntityManager
 			delete loadedList[id];
 			try {
 				if (prevItemStatus !== 'loaded: not created') {
-					if (
-						prevItemStatus !== 'not loaded: not created' &&
-						prevItemStatus !== 'not loaded: lost'
-					) {
+					if (prevItemStatus !== 'not loaded: not created') {
 						await this.filesystem.deleteFile(this.getEntityFileName(id));
 					}
 					await this.filesystem.updateFile(this.getEntityListFileName(), await this.crypter.encrypt(JSON.stringify(getEntityListFileContent(loadedList)), this.password.hash));
