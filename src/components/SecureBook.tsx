@@ -32,7 +32,8 @@ function SecureBook() {
 	const noteResultingList = filterNotesByTags(list, tagSearch);
 	const isContentLoaded = notes.selected
 		&& (notes.selected.content.status === 'loaded'
-			|| notes.selected.content.status === 'loaded: not created');
+			|| notes.selected.content.status === 'loaded: not created'
+			|| notes.selected.content.status === 'not loaded: not created');
 	const isContentLoading = notes.selected
 		&& (notes.selected.content.status === 'loading');
 	const isEditorSpinnerShown = notes.selected

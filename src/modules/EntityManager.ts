@@ -105,11 +105,13 @@ export class EntityManager<C, T extends BaseEntity<C>> implements IEntityManager
 
 			const loadedList: EntityData<C,T>['loadedList'] = {};
 			for (const id in entityListFileContent) {
+				const def = this.getDefault(id);
 				const entityInListFileWithContent = {
+					...def,
 					...entityListFileContent[id],
 					content: {
+						...def.content,
 						status: createdFiles[id] ? 'not loaded: created' : 'not loaded: not created',
-						value: null,
 					}
 				};
 				delete createdFiles[id];

@@ -2,7 +2,7 @@ import { Location } from "@interfaces/Location";
 import { AuthData } from "@interfaces/AuthData";
 import { Password } from "@interfaces/Password";
 import { Notes } from "@interfaces/Notes";
-import { NoteManager } from "@modules/NoteManager";
+import { NoteManager } from "@interfaces/NoteManager";
 
 export function createNoteViewerIntent(location: Location, auth: AuthData, password: Password, notes: Notes, noteManager: NoteManager) {
 	return {
