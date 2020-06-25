@@ -12,7 +12,7 @@ export type BaseEntity<T> = {
 			'updating' |
 			'deleting' |
 			'deleted',
-		value: null | T
+		value: T
 	},
 };
 
@@ -20,7 +20,7 @@ export type EntityListFileContent<C, T extends BaseEntity<C>> = { [k: string]: O
 
 export type UserEntity<C, T extends BaseEntity<C>> = Omit<T, 'content'> & {
 	content: {
-		value: null | C
+		value: C
 	}
 };
 

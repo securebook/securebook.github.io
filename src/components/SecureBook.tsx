@@ -271,7 +271,7 @@ function SecureBook() {
 								disabled={!isContentLoaded}
 								showTextLoading={!!isContentLoading}
 								contentId={contentId}
-								content={notes.selected.content.value || { html: '' }}
+								content={notes.selected.content.value}
 								onContentChange={(text, content) => {
 									noteManager.updateSelectedNoteContent(text, content);
 								}}
