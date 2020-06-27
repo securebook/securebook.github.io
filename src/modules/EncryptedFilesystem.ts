@@ -1,10 +1,10 @@
-import { EncryptedFilesystem as IEncryptedFilesystem } from '@interfaces/EncryptedFilesystem';
+import { JSONFilesystem } from '@interfaces/JSONFilesystem';
 import { Filesystem } from '@interfaces/Filesystem';
 import { Password } from '@interfaces/Password';
 import { Crypter } from '@interfaces/Crypter';
 import { PasswordIncorrect } from '@errors/PasswordIncorrect';
 
-export class EncryptedFilesystem implements IEncryptedFilesystem {
+export class EncryptedFilesystem implements JSONFilesystem {
 	private readonly filesystem: Filesystem;
 	private readonly password: Password;
 	private readonly crypter: Crypter;

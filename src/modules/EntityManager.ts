@@ -1,6 +1,6 @@
 import { BaseEntity, EntityData, EntityListFileContent, UserEntity } from "@interfaces/EntityData";
 import { EntityManager as IEntityManager } from "@interfaces/EntityManager";
-import { EncryptedFilesystem } from "@interfaces/EncryptedFilesystem";
+import { JSONFilesystem } from "@interfaces/JSONFilesystem";
 import { PasswordIncorrect } from "@errors/PasswordIncorrect";
 import { getEntityListFileContent } from "@utils/entity";
 import { getUUID } from "@utils/uuid";
@@ -9,11 +9,11 @@ import { deepCopy } from "@utils/deep";
 export class EntityManager<C, T extends BaseEntity<C>> implements IEntityManager<C,T> {
 	private readonly entityName: string;
 	private readonly entityData: EntityData<C,T>;
-	private readonly filesystem: EncryptedFilesystem;
+	private readonly filesystem: JSONFilesystem;
 	private readonly getDefault: (id: string) => UserEntity<C,T>;
 	private currentRequest: Promise<any>;
 
-	constructor(entityName: string, entityData: EntityData<C,T>, filesystem: EncryptedFilesystem, getDefault: (id: string) => UserEntity<C,T>) {
+	constructor(entityName: string, entityData: EntityData<C,T>, filesystem: JSONFilesystem, getDefault: (id: string) => UserEntity<C,T>) {
 		this.entityName = entityName;
 		this.entityData = entityData;
 		this.filesystem = filesystem;
