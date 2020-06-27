@@ -32,6 +32,7 @@ import { createEditor } from "@editor/createEditor";
 import { AuthURLStorage } from "@modules/AuthURLStorage";
 import { createDarkMode } from "@view/createDarkMode";
 import { PassStorage } from "@view/PassStorage";
+import { EncryptedFilesystem } from "@modules/EncryptedFilesystem";
 
 export function createApp(): [Connected, Store, Managers] {
 	const connected: Connected = {
@@ -70,7 +71,8 @@ export function createApp(): [Connected, Store, Managers] {
 	const passwordManager = new PasswordManager(password, passStorage);
 	const notesEntityData = connected.createEntityData<NoteContent, Note>();
 	const notes = connected.createNotes(location, notesEntityData);
-	const noteEntityManager = new EntityManager<NoteContent,Note>('notes', notesEntityData, filesystem, password, crypter, getDefaultNote);
+	const encryptedFilesystem = new EncryptedFilesystem(filesystem, password, crypter);
+	const noteEntityManager = new EntityManager<NoteContent,Note>('notes', notesEntityData, encryptedFilesystem, getDefaultNote);
 	const noteManager = new NoteManager(notes, noteEntityManager, pathManager);
 	const noteViewerIntent = connected.createNoteViewerIntent(location, gitlabAuthData, password, notes, noteManager);
 	const editor = createEditor();

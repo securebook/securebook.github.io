@@ -1,8 +1,6 @@
 import { BaseEntity, EntityData, EntityListFileContent, UserEntity } from "@interfaces/EntityData";
 import { EntityManager as IEntityManager } from "@interfaces/EntityManager";
-import { Filesystem } from "@interfaces/Filesystem";
-import { Password } from "@interfaces/Password";
-import { Crypter } from "@interfaces/Crypter";
+import { EncryptedFilesystem } from "@interfaces/EncryptedFilesystem";
 import { PasswordIncorrect } from "@errors/PasswordIncorrect";
 import { getEntityListFileContent } from "@utils/entity";
 import { getUUID } from "@utils/uuid";
@@ -11,18 +9,14 @@ import { deepCopy } from "@utils/deep";
 export class EntityManager<C, T extends BaseEntity<C>> implements IEntityManager<C,T> {
 	private readonly entityName: string;
 	private readonly entityData: EntityData<C,T>;
-	private readonly filesystem: Filesystem;
-	private readonly password: Password;
-	private readonly crypter: Crypter;
+	private readonly filesystem: EncryptedFilesystem;
 	private readonly getDefault: (id: string) => UserEntity<C,T>;
 	private currentRequest: Promise<any>;
 
-	constructor(entityName: string, entityData: EntityData<C,T>, filesystem: Filesystem, password: Password, crypter: Crypter, getDefault: (id: string) => UserEntity<C,T>) {
+	constructor(entityName: string, entityData: EntityData<C,T>, filesystem: EncryptedFilesystem, getDefault: (id: string) => UserEntity<C,T>) {
 		this.entityName = entityName;
 		this.entityData = entityData;
 		this.filesystem = filesystem;
-		this.password = password;
-		this.crypter = crypter;
 		this.getDefault = getDefault;
 		this.currentRequest = Promise.resolve();
 	}
@@ -79,19 +73,10 @@ export class EntityManager<C, T extends BaseEntity<C>> implements IEntityManager
 			let entityListFileContent: EntityListFileContent<C,T> = {};
 			try {
 				if (isNoteListCreated) {
-					const content = await this.crypter.decrypt(await this.filesystem.getFileContent(entityListName), this.password.hash);
-					try {
-						entityListFileContent = JSON.parse(content);
-						this.password.status = 'verified';
-					}
-					catch(e) {
-						this.password.status = 'incorrect';
-						throw new PasswordIncorrect();
-					}
+					entityListFileContent = await this.filesystem.getJsonFileContent(entityListName);
 				}
 				else {
-					await this.filesystem.createFile(entityListName, await this.crypter.encrypt(JSON.stringify(entityListFileContent), this.password.hash));
-					this.password.status = 'verified';
+					await this.filesystem.createJsonFile(entityListName, entityListFileContent);
 				}
 			}
 			catch(e) {
@@ -144,15 +129,17 @@ export class EntityManager<C, T extends BaseEntity<C>> implements IEntityManager
 		await this.performAfterCurrentRequest(async () => {
 			this.entityData.status = 'loading entity';
 			this.performOnLists(list => list[id].content.status = 'loading');
+
 			let content: C;
 			try {
-				content = JSON.parse(await this.crypter.decrypt(await this.filesystem.getFileContent(this.getEntityFileName(id)), this.password.hash));
+				content = await this.filesystem.getJsonFileContent(this.getEntityFileName(id));
 			}
 			catch(e) {
 				this.performOnLists(list => list[id].content.status = 'error');
 				this.entityData.status = 'error';
 				throw e;
 			}
+
 			this.performOnLists(list => {
 				list[id].content.status = 'loaded';
 				list[id].content.value = content;
@@ -168,9 +155,10 @@ export class EntityManager<C, T extends BaseEntity<C>> implements IEntityManager
 			this.entityData.workingList = { ...this.entityData.workingList };
 			const loadedList = { ...this.entityData.loadedList };
 			loadedList[id] = this.entityData.workingList[id];
+
 			try {
-				await this.filesystem.createFile(this.getEntityFileName(id), await this.crypter.encrypt(JSON.stringify(this.entityData.workingList[id].content.value), this.password.hash));
-				await this.filesystem.updateFile(this.getEntityListFileName(), await this.crypter.encrypt(JSON.stringify(getEntityListFileContent(loadedList)), this.password.hash));
+				await this.filesystem.createJsonFile(this.getEntityFileName(id), this.entityData.workingList[id].content.value);
+				await this.filesystem.updateJsonFile(this.getEntityListFileName(), getEntityListFileContent(loadedList));
 			}
 			catch(e) {
 				this.entityData.workingList[id].content.status = 'error';
@@ -178,6 +166,7 @@ export class EntityManager<C, T extends BaseEntity<C>> implements IEntityManager
 				this.entityData.status = 'error';
 				throw e;
 			}
+
 			this.entityData.workingList[id].content.status = 'loaded';
 			this.entityData.workingList = { ...this.entityData.workingList };
 			this.entityData.loadedList[id] = deepCopy(this.entityData.workingList[id]);
@@ -192,15 +181,17 @@ export class EntityManager<C, T extends BaseEntity<C>> implements IEntityManager
 			this.performOnLists(list => list[id].content.status = 'updating');
 			const loadedList = { ...this.entityData.loadedList };
 			loadedList[id] = this.entityData.workingList[id];
+
 			try {
-				await this.filesystem.updateFile(this.getEntityFileName(id), await this.crypter.encrypt(JSON.stringify(this.entityData.workingList[id].content.value), this.password.hash));
-				await this.filesystem.updateFile(this.getEntityListFileName(), await this.crypter.encrypt(JSON.stringify(getEntityListFileContent(loadedList)), this.password.hash));
+				await this.filesystem.updateJsonFile(this.getEntityFileName(id), this.entityData.workingList[id].content.value);
+				await this.filesystem.updateJsonFile(this.getEntityListFileName(), getEntityListFileContent(loadedList));
 			}
 			catch(e) {
 				this.performOnLists(list => list[id].content.status = 'error');
 				this.entityData.status = 'error';
 				throw e;
 			}
+
 			this.entityData.workingList[id].content.status = 'loaded';
 			this.entityData.workingList = { ...this.entityData.workingList };
 			this.entityData.loadedList[id] = deepCopy(this.entityData.workingList[id]);
@@ -220,12 +211,13 @@ export class EntityManager<C, T extends BaseEntity<C>> implements IEntityManager
 			});
 			const loadedList = { ...this.entityData.loadedList };
 			delete loadedList[id];
+
 			try {
 				if (prevItemStatus !== 'loaded: not created') {
 					if (prevItemStatus !== 'not loaded: not created') {
 						await this.filesystem.deleteFile(this.getEntityFileName(id));
 					}
-					await this.filesystem.updateFile(this.getEntityListFileName(), await this.crypter.encrypt(JSON.stringify(getEntityListFileContent(loadedList)), this.password.hash));
+					await this.filesystem.updateJsonFile(this.getEntityListFileName(), getEntityListFileContent(loadedList));
 				}
 			}
 			catch(e) {
@@ -237,6 +229,7 @@ export class EntityManager<C, T extends BaseEntity<C>> implements IEntityManager
 				this.entityData.status = 'error';
 				throw e;
 			}
+
 			this.performOnLists(list => {
 				if (list[id]) {
 					list[id].content.status = 'deleted';
