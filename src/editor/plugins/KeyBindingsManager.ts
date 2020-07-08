@@ -4,6 +4,7 @@ import { Schema } from "prosemirror-model";
 import { EditorPlugins, AddEditorPlugin } from "@editor/interfaces/EditorPlugins";
 import { keymap } from "prosemirror-keymap";
 import { baseKeymap } from "prosemirror-commands";
+import { isMac } from "@utils/keycode";
 
 export class KeyBindingsManager implements IKeyBindingsManager, EditorPlugins {
 	private readonly keyBindings: KeyBindings[];
@@ -20,12 +21,11 @@ export class KeyBindingsManager implements IKeyBindingsManager, EditorPlugins {
 	}
 
 	getKeyMap(keyBindings: KeyBindings, schema: Schema) {
-		const isMac = typeof navigator != "undefined" ? /Mac/.test(navigator.platform) : false;
 		const keys: KeyMap = {};
 		const addKeyBinding: AddKeyBinding = (key, cmd) => {
 			keys[key] = cmd;
 		};
-		keyBindings.addKeyBindings(addKeyBinding, schema, isMac);
+		keyBindings.addKeyBindings(addKeyBinding, schema, isMac());
 		return keys;
 	}
 }

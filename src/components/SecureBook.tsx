@@ -21,6 +21,7 @@ import Donate from '@components/Donate';
 import LoadingSpinner from '@components/LoadingSpinner';
 import Tags from '@components/Tags';
 import NoteItem from '@components/NoteItem';
+import { keycodes, isCtrl } from '@utils/keycode';
 
 const optionalSidebarScreenWidth = `1450px`;
 
@@ -36,12 +37,12 @@ function SecureBook() {
 			|| notes.selected.content.status === 'not loaded: not created');
 	const isContentLoading = notes.selected
 		&& (notes.selected.content.status === 'loading');
-	const isEditorSpinnerShown = notes.selected
-		&& (
-			notes.selected.content.status === 'deleting' ||
-			notes.selected.content.status === 'updating' ||
-			notes.selected.content.status === 'creating'
-		);
+	const isNoteChanging = notes.selected && (
+		notes.selected.content.status === 'deleting' ||
+		notes.selected.content.status === 'updating' ||
+		notes.selected.content.status === 'creating'
+	);
+	const isEditorSpinnerShown = isNoteChanging;
 	const { contextMenuId, getTriggerProps, contextMenuProps } = useContextMenu();
 	const focusedId = contextMenuId ?? notes.selectedId;
 	const contentId = notes.selected && !isContentLoading && notes.selected.id;
@@ -113,6 +114,31 @@ function SecureBook() {
 	);
 
 	const donateFormRef = useRef<HTMLFormElement>(null);
+
+	const canSaveNoteRef = useRef(false);
+	canSaveNoteRef.current = (
+		!!notes.selected &&
+		!isNoteChanging &&
+		notes.selected.content.status !== 'loading'
+	);
+	
+	useEffectOnce(() => {
+		const listener = (e: KeyboardEvent) => {
+			if (isCtrl(e) && e.keyCode === keycodes['s']) {
+				e.preventDefault();
+
+				if (canSaveNoteRef.current) {
+					noteManager.saveSelectedNote();
+				}
+			}
+		};
+
+		window.addEventListener('keydown', listener);
+
+		return () => {
+			window.removeEventListener('keydown', listener);
+		};
+	});
 
 	return <div className="SecureBook">
 		{
