@@ -1,12 +1,11 @@
-import { useState, useContext } from "preact/hooks";
+import { useState, useContext, useRef } from "preact/hooks";
 import { useUnmount } from "@view/useUnmount";
 import { ConnectedContext } from "@view/ConnectedContext";
 import { useOnce } from "@view/useOnce";
 
-export function connect<T>(Component: T): T {
+export function connect<T extends (...args: any[]) => any>(Component: T): T {
 	return function(...args) {
-		let result;
-		const C = Component as any;
+		const result = useRef(null);
 		const { createRenderer } = useContext(ConnectedContext);
 		const [,setState] = useState({});
 		const renderer = useOnce(() => {
@@ -15,7 +14,7 @@ export function connect<T>(Component: T): T {
 		renderer.calculation = {
 			isInitialRender: true,
 			perform() {
-				result = C(...args);
+				result.current = Component(...args);
 			},
 			onUpdate() {
 				setState({});
@@ -24,6 +23,7 @@ export function connect<T>(Component: T): T {
 		useUnmount(() => {
 			renderer.calculation = null;
 		});
-		return result;
+		renderer.calculation;
+		return result.current;
 	} as unknown as T;
 }

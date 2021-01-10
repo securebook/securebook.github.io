@@ -1111,7 +1111,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.6":
+"@babel/runtime@npm:^7.12.5":
+  version: 7.12.5
+  resolution: "@babel/runtime@npm:7.12.5"
+  dependencies:
+    regenerator-runtime: ^0.13.4
+  checksum: 423fb0079353db2faa0dad0cbdf0a90fbc5b511d1f77e5645d1aa0b144a144e24502bb023c12a31d7dca63b6e16ae36afa59992f0404e92e21de211051c361e3
+  languageName: node
+  linkType: hard
+
+"@babel/runtime@npm:^7.8.4, @babel/runtime@npm:^7.9.6":
   version: 7.9.6
   resolution: "@babel/runtime@npm:7.9.6"
   dependencies:
@@ -9518,7 +9527,7 @@ fsevents@~2.1.2:
     sass: ^1.26.5
     sass-loader: ^8.0.2
     style-loader: ^1.2.1
-    typeconnect: ^0.3.1
+    typeconnect: ^0.5.2
     typescript: ^3.8.3
     webpack: ^4.43.0
     webpack-cli: ^3.3.11
@@ -10596,12 +10605,12 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"typeconnect@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "typeconnect@npm:0.3.1"
+"typeconnect@npm:^0.5.2":
+  version: 0.5.2
+  resolution: "typeconnect@npm:0.5.2"
   dependencies:
-    "@babel/runtime": ^7.3.1
-  checksum: 60f7cbb517e9a48098ca16d57b37f6c145c42f468f2d374e5f9c8901475ad383800c3eae164a9e88b68d7dd0ad8a1afbfb613d3bc72c1656beba530ecc376b79
+    "@babel/runtime": ^7.12.5
+  checksum: e0c27cd3b251a3c2ead4122075a1839a8214a69e8fcc297755a6619af92f135f953cc9c34f6b1bfc14e27e7ca98364ce35e692711a840e7f8df4c94c9753194c
   languageName: node
   linkType: hard
 
