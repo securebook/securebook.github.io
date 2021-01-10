@@ -5,16 +5,16 @@ import { useOnce } from "@view/useOnce";
 
 export function connect<T extends (...args: any[]) => any>(Component: T): T {
 	return function(...args) {
-		const result = useRef(null);
 		const { createRenderer } = useContext(ConnectedContext);
 		const [,setState] = useState({});
 		const renderer = useOnce(() => {
 			return createRenderer();
 		});
 		renderer.calculation = {
+			result: null,
 			isInitialRender: true,
 			perform() {
-				result.current = Component(...args);
+				this.result = Component(...args);
 			},
 			onUpdate() {
 				setState({});
@@ -23,7 +23,6 @@ export function connect<T extends (...args: any[]) => any>(Component: T): T {
 		useUnmount(() => {
 			renderer.calculation = null;
 		});
-		renderer.calculation;
-		return result.current;
+		return renderer.calculation.result;
 	} as unknown as T;
 }
