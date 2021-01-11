@@ -32,7 +32,7 @@
     "@types/prosemirror-transform": "^1.1.1",
     "@types/prosemirror-view": "^1.11.4",
     "@types/webpack-env": "^1.15.2",
-    "@yarnpkg/pnpify": "^2.0.0-rc.22",
+    "@yarnpkg/pnpify": "^2.4.0",
     "ava": "^3.8.2",
     "babel-loader": "^8.1.0",
     "babel-plugin-webpack-alias-7": "^0.1.1",

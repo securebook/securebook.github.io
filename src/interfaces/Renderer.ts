@@ -1,7 +1,6 @@
 export interface Renderer {
 	calculation: null | {
-		result: any;
-		isInitialRender: boolean;
+		isInitialRender: boolean,
 		perform: () => void;
 		onUpdate: () => void;
 	}

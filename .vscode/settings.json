@@ -1,7 +1,11 @@
 {
-  "typescript.tsdk": ".vscode/pnpify/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.tokenColorCustomizations": {
     "comments": "#e60000"
-  }
+  },
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "typescript.tsdk": ".yarn/sdks/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }
