@@ -74,6 +74,6 @@
     "prosemirror-utils": "^0.9.6",
     "prosemirror-view": "^1.14.11",
     "query-string": "^6.12.1",
-    "typeconnect": "^0.5.3"
+    "typeconnect": "^0.5.4"
   }
 }

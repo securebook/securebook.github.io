@@ -9633,7 +9633,7 @@ fsevents@~2.1.2:
     sass: ^1.26.5
     sass-loader: ^8.0.2
     style-loader: ^1.2.1
-    typeconnect: ^0.5.3
+    typeconnect: ^0.5.4
     typescript: ^3.8.3
     webpack: ^4.43.0
     webpack-cli: ^3.3.11
@@ -10740,12 +10740,12 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"typeconnect@npm:^0.5.3":
-  version: 0.5.3
-  resolution: "typeconnect@npm:0.5.3"
+"typeconnect@npm:^0.5.4":
+  version: 0.5.4
+  resolution: "typeconnect@npm:0.5.4"
   dependencies:
     "@babel/runtime": ^7.12.5
-  checksum: 4e3da5e881179815197fd369cb14717dd9bd6b96516364ba03d57c19893a3bbd5a16dee16ee1cdd75e03e02e1653cf47037b29afee4e7e9838c106b656434df4
+  checksum: dd86ee5ba05708d741ec3538ebfb9d49ca9b8e4ab13065ebc2b9974cf5118ae31335ba09394f22026e916f5ac6abddb45784aa57fc3e63a59025da83f20b268f
   languageName: node
   linkType: hard
 

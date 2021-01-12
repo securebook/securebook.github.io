@@ -8,7 +8,21 @@
 			"reAttach": false,
 			"url": "http://192.168.0.244:8080",
 			"firefoxArgs": ["--devtools"],
-			"webRoot": "${workspaceFolder}"
+			"webRoot": "zip:/${workspaceFolder}",
+			"pathMappings": [
+				{ "url": "webpack:///~/", "path": "${workspaceFolder}/node_modules/" },
+				{ "url": "webpack:///./~/", "path": "${workspaceFolder}/node_modules/" },
+				{ "url": "webpack:///./", "path": "${workspaceFolder}/" },
+				{ "url": "webpack:///src/", "path": "${workspaceFolder}/src/" },
+				{ "url": "webpack:///node_modules/", "path": "${workspaceFolder}/node_modules/" },
+				{ "url": "webpack:///webpack", "path": null },
+				{ "url": "webpack:///(webpack)", "path": null },
+				{ "url": "webpack:///pages/", "path": "${workspaceFolder}/pages/" },
+				{ "url": "webpack://[name]_[chunkhash]/node_modules/", "path": "${workspaceFolder}/node_modules/" },
+				{ "url": "webpack://[name]_[chunkhash]/", "path": null },
+				{ "url": "webpack:///.yarn/", "path": "${webRoot}/.yarn/" },
+				{ "url": "webpack:///", "path": "${workspaceFolder}" },
+			]
 		},
 		{
 			"type": "node",

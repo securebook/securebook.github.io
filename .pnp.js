@@ -247,7 +247,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       ],
       [
         "typeconnect",
-        "npm:0.5.3"
+        "npm:0.5.4"
       ],
       [
         "typescript",
@@ -339,7 +339,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["sass", "npm:1.26.5"],
             ["sass-loader", "virtual:4c800ca8cd67ed5d31d4104f402a29e41ce72041f5ea108f192f810c376c3ad9b493f8e4052fef98cc4d7b98d8072e7f3f74650d940fd54ae093a3861376fd64#npm:8.0.2"],
             ["style-loader", "virtual:4c800ca8cd67ed5d31d4104f402a29e41ce72041f5ea108f192f810c376c3ad9b493f8e4052fef98cc4d7b98d8072e7f3f74650d940fd54ae093a3861376fd64#npm:1.2.1"],
-            ["typeconnect", "npm:0.5.3"],
+            ["typeconnect", "npm:0.5.4"],
             ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=64df9d"],
             ["webpack", "npm:4.43.0"],
             ["webpack-cli", "virtual:4c800ca8cd67ed5d31d4104f402a29e41ce72041f5ea108f192f810c376c3ad9b493f8e4052fef98cc4d7b98d8072e7f3f74650d940fd54ae093a3861376fd64#npm:3.3.11"],
@@ -11226,7 +11226,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["sass", "npm:1.26.5"],
             ["sass-loader", "virtual:4c800ca8cd67ed5d31d4104f402a29e41ce72041f5ea108f192f810c376c3ad9b493f8e4052fef98cc4d7b98d8072e7f3f74650d940fd54ae093a3861376fd64#npm:8.0.2"],
             ["style-loader", "virtual:4c800ca8cd67ed5d31d4104f402a29e41ce72041f5ea108f192f810c376c3ad9b493f8e4052fef98cc4d7b98d8072e7f3f74650d940fd54ae093a3861376fd64#npm:1.2.1"],
-            ["typeconnect", "npm:0.5.3"],
+            ["typeconnect", "npm:0.5.4"],
             ["typescript", "patch:typescript@npm%3A3.8.3#builtin<compat/typescript>::version=3.8.3&hash=64df9d"],
             ["webpack", "npm:4.43.0"],
             ["webpack-cli", "virtual:4c800ca8cd67ed5d31d4104f402a29e41ce72041f5ea108f192f810c376c3ad9b493f8e4052fef98cc4d7b98d8072e7f3f74650d940fd54ae093a3861376fd64#npm:3.3.11"],
@@ -12451,10 +12451,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["typeconnect", [
-        ["npm:0.5.3", {
-          "packageLocation": "./.yarn/cache/typeconnect-npm-0.5.3-c55b9877c3-4e3da5e881.zip/node_modules/typeconnect/",
+        ["npm:0.5.4", {
+          "packageLocation": "./.yarn/cache/typeconnect-npm-0.5.4-93f4c359be-dd86ee5ba0.zip/node_modules/typeconnect/",
           "packageDependencies": [
-            ["typeconnect", "npm:0.5.3"],
+            ["typeconnect", "npm:0.5.4"],
             ["@babel/runtime", "npm:7.12.5"]
           ],
           "linkType": "HARD",

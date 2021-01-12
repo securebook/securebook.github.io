@@ -24,6 +24,7 @@ export function connect<T>(Component: T): T {
 		useUnmount(() => {
 			renderer.calculation = null;
 		});
+		renderer.calculation;
 		return result;
 	} as unknown as T;
 }
